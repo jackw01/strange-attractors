@@ -1,0 +1,134 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang=""> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <link href="https://fonts.googleapis.com/css?family=Fira+Mono|Open+Sans:300,300i,400,400i,600,600i,700,700i|Titillium+Web:200,400,600,700" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+        <title>Strange Attractors</title>
+        <meta name="description" content="Triangulator: generate geometric wallpapers for iOS, Android, and your computer">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1.0,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+        <link rel="icon" href="favicon.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+        <link rel="apple-touch-icon" href="img/Apple Home Screen Icon.png">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/extra.css">
+        <link rel="stylesheet" href="css/normalize.min.css">
+        <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+    </head>
+    <body class="body-dark">
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an outdated browser. Please <a href="https://www.google.com/chrome/browser/desktop/index.html">download Google Chrome</a> to improve your experience.</p>
+        <![endif]-->
+        <main>
+            <div class="main wrapper clearfix">
+                <aside class="left">
+                    <h1 class="h1-light">Strange Attractors</h1><br>
+                    <table class="input-table">
+                        <tr>
+                            <td>
+                                <span class="label">Type: </span>
+                            </td>
+                            <td>
+                                <span class="select-container dark-button" style="width:288px">
+                                    <select style="width:288px" id="select-type">
+                                        <option value="2">De Jong</option>
+                                        <option value="1">Trigonometric</option>
+                                        <option value="0">Quadratic</option>
+                                    </select>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="label">Seed: </span>
+                            </td>
+                            <td>
+                                <input type="number" class="dark-text-input" id="seed">&nbsp;<span class="small">Leave blank for automatic</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="label">Resolution: </span>
+                            </td>
+                            <td>
+                                <input type="number" class="validate-whole-positive dark-text-input validate-resolution" id="resolution-w" value="720"> x <input type="number" class="validate-whole-positive dark-text-input validate-resolution" id="resolution-h" value="720">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="label">Color: </span>
+                            </td>
+                            <td>
+                                <span class="slider-container"><input type="range" style="width:300px" min="0" max="1" step="0.005" value="0.0" class="dark-slider slider-hue" id="hue"></span><br>
+                                <span class="slider-container"><input type="range" style="width:300px" min="0" max="1" step="0.005" value="0.9" class="dark-slider slider-saturation" id="saturation"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="label">Color Variation: </span>
+                            </td>
+                            <td>
+                                <span class="slider-container"><input type="range" style="width:300px" min="0" max="1" step="0.01" value="0.07" class="dark-slider" id="variation"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="label">Brightness: </span>
+                            </td>
+                            <td>
+                                <span class="slider-container"><input type="range" style="width:300px" min="0.5" max="2" step="0.01" value="1" class="dark-slider" id="brightness"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="label">Glow: </span>
+                            </td>
+                            <td>
+                                <span class="slider-container"><input type="range" style="width:300px" min="0" max="5" step="0.05" value="2" class="dark-slider" id="glow"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="label">Quality: </span>
+                            </td>
+                            <td>
+                                <span class="slider-container"><input type="range" style="width:300px" min="0.05" max="1" step="0.01" value="1" class="dark-slider" id="quality"></span>
+                            </td>
+                        </tr>
+                    </table>
+                    <br>
+                    <a class="button button-rect dark-button" id="render">Render</a><div style="width:1em;display:inline-block"></div><a class="button button-rect dark-button" id="save" style="display:none">Save</a><br><br>
+                    <div class="progress-bar-track dark-progress-bar-track" style="display:none"><div class="progress-bar light-progress-bar" style="width:0"></div></div>
+                </aside>
+                <article class="right">
+                    <canvas id="canvas" width="540" height="540"></canvas>
+                </article>
+            </div>
+            <canvas id="renderCanvas"></canvas>
+        </main>
+        <div class="infotext">
+            © 2016 <a href="http://github.com/jackw01">@jackw01</a><br>
+            Released under the GPL v3 license
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.0/seedrandom.min.js"></script>
+        <script src="bower_components/stackblur-canvas/dist/stackblur.js"></script>
+        <script src="js/ui.js"></script>
+        <script src="js/main.js"></script>
+        <!--<script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-86167050-3', 'auto');
+            ga('send', 'pageview');
+        </script>-->
+    </body>
+</html>
