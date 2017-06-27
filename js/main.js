@@ -389,7 +389,7 @@ function calculate() {
 /*  ()()    */             r = q;
 /*  ('.')   */             g = vi;
 /*  (()()   */             b = p;
-/* c(_()()x */             break;
+/* c(_()()  */             break;
                         case 2:
                             r = p;
                             g = vi;
@@ -433,55 +433,57 @@ function calculate() {
         var image = new Image();
         image.src = rc.canvas.toDataURL();
 
-        var tCanvas = document.createElement("canvas"),
-            tc = tCanvas.getContext("2d");
+        image.onload = function() {
 
-        tc.canvas.width = Math.round(image.width / 2);
-        tc.canvas.height = Math.round(image.height / 2);
+            var tCanvas = document.createElement("canvas"),
+                tc = tCanvas.getContext("2d");
 
-        tc.drawImage(image, 0, 0, tc.canvas.width, tc.canvas.height);
+            tc.canvas.width = Math.round(this.naturalWidth / 2);
+            tc.canvas.height = Math.round(this.naturalHeight / 2);
+            tc.drawImage(this, 0, 0, tc.canvas.width, tc.canvas.height);
 
-        rc.canvas.width = Math.round(width / renderScale);
-        rc.canvas.height = Math.round(height / renderScale);
-        rc.drawImage(tc.canvas, 0, 0, rc.canvas.width, rc.canvas.height);
+            rc.canvas.width = Math.round(width / renderScale);
+            rc.canvas.height = Math.round(height / renderScale);
+            rc.drawImage(tc.canvas, 0, 0, rc.canvas.width, rc.canvas.height);
 
-        data = rc.getImageData(0, 0, rc.canvas.width, rc.canvas.height);
-        var blurData = rc.getImageData(0, 0, rc.canvas.width, rc.canvas.height);
-        StackBlur.imageDataRGBA(blurData, 0, 0, rc.canvas.width, rc.canvas.height, Math.round(rc.canvas.width / 24));
+            data = rc.getImageData(0, 0, rc.canvas.width, rc.canvas.height);
+            var blurData = rc.getImageData(0, 0, rc.canvas.width, rc.canvas.height);
+            StackBlur.imageDataRGBA(blurData, 0, 0, rc.canvas.width, rc.canvas.height, Math.round(rc.canvas.width / 24));
 
-        // Compositing
-        for (var a = 0; a < rc.canvas.width; a++) {
-            for (var b = 0; b < rc.canvas.height; b++) {
+            // Compositing
+            for (var a = 0; a < rc.canvas.width; a++) {
+                for (var b = 0; b < rc.canvas.height; b++) {
 
-                data.data[((b * (rc.canvas.width * 4)) + (a * 4)) + 0] += blurData.data[((b * (rc.canvas.width * 4)) + (a * 4)) + 0] * glowAmount;
-                data.data[((b * (rc.canvas.width * 4)) + (a * 4)) + 1] += blurData.data[((b * (rc.canvas.width * 4)) + (a * 4)) + 1] * glowAmount;
-                data.data[((b * (rc.canvas.width * 4)) + (a * 4)) + 2] += blurData.data[((b * (rc.canvas.width * 4)) + (a * 4)) + 2] * glowAmount;
+                    data.data[((b * (rc.canvas.width * 4)) + (a * 4)) + 0] += blurData.data[((b * (rc.canvas.width * 4)) + (a * 4)) + 0] * glowAmount;
+                    data.data[((b * (rc.canvas.width * 4)) + (a * 4)) + 1] += blurData.data[((b * (rc.canvas.width * 4)) + (a * 4)) + 1] * glowAmount;
+                    data.data[((b * (rc.canvas.width * 4)) + (a * 4)) + 2] += blurData.data[((b * (rc.canvas.width * 4)) + (a * 4)) + 2] * glowAmount;
+                }
             }
+
+            rc.fillRect(0, 0, initialWidth, initialHeight);
+            rc.putImageData(data, 0, 0);
+            c.fillStyle = "#000000";
+            c.fillRect(0, 0, c.canvas.width, c.canvas.height);
+            c.drawImage(rc.canvas, 0, 0, c.canvas.width, c.canvas.height);
+
+            var nx = 0, ny = 0;
+
+            if (initialWidth > rc.canvas.width) nx = Math.round((initialWidth - rc.canvas.width) / 2);
+            else if (initialHeight > rc.canvas.height) ny = Math.round((initialHeight - rc.canvas.height) / 2);
+
+            rc.canvas.width = initialWidth;
+            rc.canvas.height = initialHeight;
+            rc.canvas.style.width = rc.canvas.width + "px";
+            rc.canvas.style.height = rc.canvas.height + "px";
+            rc.fillRect(0, 0, initialWidth, initialHeight);
+            rc.putImageData(data, nx, ny);
+
+            $(".progress-bar-track").fadeOut(200);
+            $(".progress-bar").css("width", "0px");
+            $("#save").fadeIn(200);
+
+            rendering = false;
         }
-
-        rc.fillRect(0, 0, initialWidth, initialHeight);
-        rc.putImageData(data, 0, 0);
-        c.fillStyle = "#000000";
-        c.fillRect(0, 0, c.canvas.width, c.canvas.height);
-        c.drawImage(rc.canvas, 0, 0, c.canvas.width, c.canvas.height);
-
-        var nx = 0, ny = 0;
-
-        if (initialWidth > rc.canvas.width) nx = Math.round((initialWidth - rc.canvas.width) / 2);
-        else if (initialHeight > rc.canvas.height) ny = Math.round((initialHeight - rc.canvas.height) / 2);
-
-        rc.canvas.width = initialWidth;
-        rc.canvas.height = initialHeight;
-        rc.canvas.style.width = rc.canvas.width + "px";
-        rc.canvas.style.height = rc.canvas.height + "px";
-        rc.fillRect(0, 0, initialWidth, initialHeight);
-        rc.putImageData(data, nx, ny);
-
-        $(".progress-bar-track").fadeOut(200);
-        $(".progress-bar").css("width", "0px");
-        $("#save").fadeIn(200);
-
-        rendering = false;
     }
 
     newAttractor();
