@@ -2,7 +2,7 @@
 ____ ___ ____ ____ _  _ ____ ____    ____ ___ ___ ____ ____ ____ ___ ____ ____ ____
 [__   |  |__/ |__| |\ | | __ |___    |__|  |   |  |__/ |__| |     |  |  | |__/ [__
 ___]  |  |  \ |  | | \| |__] |___    |  |  |   |  |  \ |  | |___  |  |__| |  \ ___]
-Copyright (C) 2016 jackw01
+Copyright (C) 2016-2017 jackw01
 
 This program is distrubuted under the MIT License, see LICENSE for details
 */
